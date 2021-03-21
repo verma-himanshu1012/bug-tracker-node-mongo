@@ -11,7 +11,8 @@
     <tbody>
         <% bugs.forEach((bug) => { %>
         
-        <tr <% if(bug.daysLeft <= 0 && !bug.resolved) { %> style="background-color: lightyellow" <% } %> >
+        <tr <% if(bug.daysLeft <= 0 && !bug.resolved) { %> style="background-color: lightyellow" <% } %> 
+            <% if(bug.resolved) { %> style="background-color: #dcffe4" <% } %> >
             <td><%= bug.title %></td>
             <td><%= bug.description %></td>
             <td><%= bug.reported %></td>
