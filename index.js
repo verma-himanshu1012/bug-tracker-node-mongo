@@ -62,7 +62,8 @@ Date.prototype.isValid = function () {
 
 app.post('/', (req, res) =>{
 
-    if(!req.body.reported || !req.body.reported.isValid()) req.body.reported = new Date();
+    // if reported is null or invalid date, make it current date and time
+    if(!req.body.reported || !(new Date(req.body.reported).isValid())) req.body.reported = new Date();
 
     bugsModel.create(req.body, (err, data) => {
         if(err) res.status(500).send(err);
