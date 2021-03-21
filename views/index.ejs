@@ -13,7 +13,11 @@
 
         $('document').ready(() => {
 
-            $('#myTable').DataTable();
+            $('#myTable').DataTable({
+                "language": {
+                    "emptyTable": "No bugs currently being tracked"
+                }
+            });
 
         });
     </script>
