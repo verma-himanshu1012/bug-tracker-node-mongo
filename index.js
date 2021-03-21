@@ -52,9 +52,17 @@ app.get('/', (req, res) => {
     });
 });
 
+Date.prototype.isValid = function () { 
+              
+    // If the date object is invalid it 
+    // will return 'NaN' on getTime()  
+    // and NaN is never equal to itself. 
+    return this.getTime() === this.getTime(); 
+}; 
 
 app.post('/', (req, res) =>{
 
+    if(!req.body.reported || !req.body.reported.isValid()) req.body.reported = new Date();
 
     bugsModel.create(req.body, (err, data) => {
         if(err) res.status(500).send(err);
