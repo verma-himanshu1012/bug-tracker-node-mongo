@@ -2,147 +2,21 @@
 <head>
     <title>Bug Tracker</title>
 
-    <link rel="stylesheet" type="text/css" href="https://datatables.net/media/css/site-examples.css?_=0602f7ec58abe00302963423bf7a8d5a">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css" />
+    <%- include('../views/partials/head.ejs') %> 
 
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
-    <script>
-
-        $('document').ready(() => {
-
-            $('#myTable').DataTable({
-                "language": {
-                    "emptyTable": "No bugs currently being tracked"
-                }
-            });
-
-        });
-    </script>
-    <style>
-
-        #main-container {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        }
-
-        #main-row {
-          display: flex;
-          flex-direction: column;
-        }
-
-        #main-row h5 {
-          text-align: center;
-          color: green;
-          height: 24px;
-        }
-
-        .row .col {
-            margin-top: 5px; margin-bottom: 5px;
-        }
-
-        .table input {
-            border: 0;
-        }
-
-        .form-btn {
-            display: flex;
-            flex-direction: column;
-            margin-top: 60px;
-        }
-
-    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="/" style="display: flex; align-items: center;">
-            <img src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" 
-            width="30" height="30" class="d-inline-block align-top" alt="" style="margin-right: 3px;">
-            <div>ug Tracker</div>
-            </a>
 
-            <div id="navbarSupportedContent" class="collapse navbar-collapse">
-                <ul class="navbar-nav mr-auto"></ul> 
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a href="/admin" class="nav-link">
-                        Admin <span id="cartBadge" class="badge badge-success"></span></a>
-                    </li> 
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <%- include('../views/partials/nav.ejs') %>
 
     <div id="main-container" class="container">
 
-        <div id="main-row" class="col-8 offset-2 justify-content-center p-3">
-
-          <% if(message) { %> 
-                <h5><%= message %> </h5>
-          <% } %>
-
-            <!-- form -->
-            <form action="/" method="POST">
-
-                <!-- user -->
-                <div class="form-group">
-                    <input type="text" class="form-control" id="title" name="title" placeholder="title" required>
-                </div>
-                <div class="form-group">
-                    <textarea class="form-control" id="description" name="description" placeholder="description" required ></textarea>
-                </div>
-
-                    <input type="hidden" name="reported" value="<%= reported %>" />
-                <div class="form-group col-12">
-                    <input type="time" class="form-control" id="time"
-                            value="<%= time %>" disabled required>
-                </div>
-                <div class="form-group col-12">
-                    <input type="date" class="form-control" id="date"
-                            value="<%= date %>" disabled required>
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" id="assignee" name="assignee" placeholder="assignee" required>
-                </div>
-
-                <div class="form-group form-btn">
-                    <button type="submit" class="btn btn-primary" >Add Bug</button>
-                </div>
-
-            </form>
-        </div>
+        <%- include('../views/partials/bug-form.ejs') %> 
 
         <div class="col-12 justify-content-center">
 
+            <%- include('../views/partials/tables/bug-table.ejs') %> 
 
-            <!-- Table -->
-            <table id="myTable" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Reported</th>
-                    <th>Assignee</th>
-                    <th>Resolved</th>
-                    <th>Days Left</th>
-                </thead>
-                <tbody>
-                    <% bugs.forEach((bug) => { %>
-                    
-                    <tr <% if(bug.daysLeft <= 0) { %> style="background-color: lightyellow" <% } %> >
-                        <td><%= bug.title %></td>
-                        <td><%= bug.description %></td>
-                        <td><%= bug.reported %></td>
-                        <td><%= bug.assignee %></td>
-                        <td><%= bug.resolved ? "Yes" : "No" %></td>
-                        <td><%= bug.daysLeft %> </td>
-                    </tr>
-                    
-                    <% }); %> 
-                </tbody>
-            </table>
         </div>
     </div>
 </body>
