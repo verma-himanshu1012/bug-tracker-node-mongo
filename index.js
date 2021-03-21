@@ -22,30 +22,32 @@ const dateTimeHelper = require('./_util/helpers');
 
 /////// Routes
 
-app.get('/', (req, res) => { 
+let formatResponseData = (res, page, data, message) => {
+
     let today = new Date();
+
+    data.forEach((bug) => {
+        let date = new Date(bug.reported);
+        bug.daysLeft = 3 - (dateTimeHelper.dateDiffInDays(date, today));
+        bug.daysLeft = bug.daysLeft < 0 ? 0 : bug.daysLeft;
+    });
+
+    res.render(page, { 
+        message: message,
+        reported : today,
+        time: `${dateTimeHelper.formatAmPm(today)}`,
+        date: `${dateTimeHelper.formatDate(today)}`,
+        bugs: data
+    });
+};
+
+
+app.get('/', (req, res) => { 
 
     bugsModel.find((err, data) => {
         if(err) res.status(500).send(err);
         else {
-
-            data.forEach((bug) => {
-                let date = new Date(bug.reported);
-                //date.setDate(date.getDate() + 3);
-
-                let today = new Date();
-
-                bug.daysLeft = 3 - (dateTimeHelper.dateDiffInDays(date, today));
-
-            });
-
-            res.render('index.ejs', { 
-                message: " ",
-                reported : today,
-                time: `${dateTimeHelper.formatAmPm(today)}`,
-                date: `${dateTimeHelper.formatDate(today)}`,
-                bugs: data
-            });
+            formatResponseData(res, 'index.ejs', data, " " );
         }
     });
 });
@@ -53,7 +55,6 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) =>{
 
-    let today = new Date();
 
     bugsModel.create(req.body, (err, data) => {
         if(err) res.status(500).send(err);
@@ -62,29 +63,33 @@ app.post('/', (req, res) =>{
             bugsModel.find((err, data) => {
                 if(err) res.status(500).send(err);
                 else {
-
-                    data.forEach((bug) => {
-                        let date = new Date(bug.reported);
-                        //date.setDate(date.getDate() + 3);
-        
-                        let today = new Date();
-        
-                        bug.daysLeft = 3 - (dateTimeHelper.dateDiffInDays(date, today));
-        
-                    });
-
-                    res.render('index.ejs', {
-                        message : 'Bug Added to Tracker',
-                        reported : today,
-                        time: `${dateTimeHelper.formatAmPm(today)}`,
-                        date: `${dateTimeHelper.formatDate(today)}`,
-                        bugs: data
-                    });
+                    formatResponseData(res, 'index.ejs', data, "Bug Added to Tracker");
                 }
             });
         }
     });
 });
+
+
+app.get('/admin', (req, res) => { 
+
+    bugsModel.find((err, data) => {
+        if(err) res.status(500).send(err);
+        else {
+            formatResponseData(res, 'admin.ejs', data, " " );
+        }
+    });
+});
+
+app.post('/resolve/:id', (req, res) => {
+
+    console.log(req.params.id);
+    bugsModel.updateOne({ _id: req.params.id }, { resolved: true }, (err, result) => {
+        if(err) console.log(err);
+        res.redirect('/admin');
+    });
+});
+
 
 
 ////////  Server
