@@ -8,7 +8,7 @@
       <form action="/" method="POST">
 
           <!-- user -->
-          <div class="form-group">
+          <div class="form-group col-8 offset-2">
               <input type="text" class="form-control" id="title" name="title" placeholder="title" required>
           </div>
           <div class="form-group">
@@ -16,15 +16,15 @@
           </div>
 
               <input type="hidden" name="reported" value="<%= reported %>" />
-          <div class="form-group col-12">
+          <div class="form-group col-4 offset-4">
               <input type="time" class="form-control" id="time"
                       value="<%= time %>" disabled required>
           </div>
-          <div class="form-group col-12">
+          <div class="form-group col-4 offset-4">
               <input type="date" class="form-control" id="date"
                       value="<%= date %>" disabled required>
           </div>
-          <div class="form-group">
+          <div class="form-group col-4 offset-4">
             <input type="text" class="form-control" id="assignee" name="assignee" placeholder="assignee" required>
           </div>
 
